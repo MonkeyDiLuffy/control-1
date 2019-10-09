@@ -2,28 +2,48 @@
 //既然*号表示0个或多个，那么可以把所有*找出来之后，假设全部表示0个再把S中多余的字母抹掉
 //这样的话修改后的S与P规则修改为：*号表示复制前一个字母，“.”表示任意字母，P与S相同输出TRUE
 #include<stdlib.h>
+#include <string.h>
 #include<stdio.h>
-int isMatch(char * s,char * p) {//输入s和p若符合规则返回0否则返回1    (改变了p和s的值，因为不需要再输出p和s)
-char *pin_s = (char *) malloc(1000 * sizeof(char));//分配内存
-char *pin_p = (char *) malloc(1000 * sizeof(char));
+bool isMatch(char * s, char * p){
+char *pin_s = (char *) malloc(150 * sizeof(char));//分配内存
+char *pin_p = (char *) malloc(150 * sizeof(char));
+char *pin_S = (char *) malloc(150 * sizeof(char));
+char S[100]={0};
+int t ,f,g;
+g=0;
+int a;
 pin_s = s;
+pin_S =S;
 pin_p = p;
+t=strlen(s);
+f=strlen(p);
+int b;
+for(a=0;a<t;a++)
+{
+S[a]=s[a];
+}
 int i_a;
-for(i_a = 0; i_a < 1000; i_a++) {//此循环目的是搜索*
+int i_b;   
+for(i_a = 0; i_a < f; i_a++) {//此循环目的是搜索*
 switch(p[i_a]) {
 case '*' :
-int i_b;
-for(i_b = 997; i_b >= i_a-1; i_b--) {//此循环目的是将*号前边的字母插入S中
-if(s[i_b] <= 'z' && s[i_b] >= 'a') {
-s[i_b+2]  = s[i_b]; 
+g=g+1;
+t=strlen(S);
+for(i_b = t+1-2*g; i_b >= i_a+1-2*g; i_b--) {//此循环目的是将*号前边的字母插入S中
+if(s[i_b] <= 'z' && s[i_b] >= 'a') 
+{
+S[i_b+2*g]  = s[i_b]; 
 }
 }
-s[i_a-1]=p[i_a-1];
-s[i_a]=p[i_a-1];
-while(s[i_a] == s[i_a+1]) {//此循环目的是删除S中重复多余的*代表的字母
+S[i_a-1]=p[i_a-1];
+S[i_a]=p[i_a-1];
+while(S[i_a] == S[i_a+1]) {//此循环目的是删除S中重复多余的*代表的字母
 int i_d;
-for(i_d = i_a; i_d < 1000; i_d++) {
-s[i_d] = s[i_d+1];
+g=g-0.5;
+t=strlen(S);
+for(i_d = i_a; i_d < t; i_d++) 
+{
+S[i_d] =S[i_d+1];
 }
 }
 default:
@@ -31,7 +51,8 @@ break;
 }
 }
 int i;
-for(i = 0; i < 500; i++) {  //循环
+t=strlen(S);
+for(i = 0; i < t; i++) {  //循环
 head:
 switch(p[i]) {
 case '.' :
@@ -41,17 +62,17 @@ p[i] = p[i-1];
 goto head;
 break;
 default: 
-if(s[i] != p[i]) {
-return 0;
+if(S[i] != p[i]) {
+return false;
 }
 break;
 }
 }
-return 1;
+return true;
 }
 int main () {
 printf(" please input s and p ");
-char s[1000] = {0},p[1000] = {0};
+char s[100] = {0},p[100] = {0};
 scanf("%s",&s);
 scanf("%s",&p);
 if(isMatch(s,p) == 0){
